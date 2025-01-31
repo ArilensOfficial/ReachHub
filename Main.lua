@@ -1,51 +1,9 @@
 -- 📌 Orion Library'yi yükle
 local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/jensonhirst/Orion/main/source'))()
 
--- 📌 Key Sistemi Ayarları
-local Key = "Helian200" -- Anahtar burada belirtilecek
-local KeyEntered = false -- Key kontrolü
-
--- 📌 Key Giriş Penceresi
-local function ShowKeyWindow()
-    -- Key giriş penceresini oluştur
-    local KeyWindow = OrionLib:MakeWindow({
-        Name = "Enter Key",
-        HidePremium = false,
-        SaveConfig = false
-    })
-
-    -- 📌 Key Giriş Kutusu
-    KeyWindow:MakeTextbox({
-        Name = "Enter Key",
-        Placeholder = "Enter the key to continue",
-        Text = "",
-        Callback = function(Value)
-            -- Key doğrulama
-            if Value == Key then
-                KeyEntered = true
-                OrionLib:MakeNotification({
-                    Name = "Success",
-                    Content = "Key validated successfully!",
-                    Image = "rbxassetid://4483362458",
-                    Time = 5
-                })
-                KeyWindow:Destroy() -- Key doğrulandıktan sonra pencereleri kapat
-                CreateMainMenu() -- Ana menüyü oluştur
-            else
-                OrionLib:MakeNotification({
-                    Name = "Error",
-                    Content = "Invalid key! Please try again.",
-                    Image = "rbxassetid://4483362458",
-                    Time = 5
-                })
-            end
-        end
-    })
-end
-
 -- 📌 Ana menüyü oluşturmak için fonksiyon
 local function CreateMainMenu()
-    -- Ana menü sadece key doğrulandıktan sonra açılacak
+    -- Ana menü oluşturuluyor
     local Window = OrionLib:MakeWindow({
         Name = "ReachGod",
         HidePremium = false,
@@ -75,6 +33,7 @@ local function CreateMainMenu()
         Text = "Studs",
         Callback = function(Value)
             ReachStuds = Value -- Seçilen mesafeyi güncelle
+            UpdateReachBox() -- Reach kutusunu güncelle
         end
     })
 
@@ -112,11 +71,23 @@ local function CreateMainMenu()
         end
     })
 
+    -- 📌 Reach Kutusunu Güncelleme Fonksiyonu
+    local ReachBox = Instance.new("Frame")
+    ReachBox.Size = UDim2.new(0, ReachStuds * 10, 0, 10) -- Şu anda Reach değerine göre
+    ReachBox.Position = UDim2.new(0.5, -ReachStuds * 5, 0, 50)
+    ReachBox.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+    ReachBox.BackgroundTransparency = 0.5
+    ReachBox.Parent = game.Players.LocalPlayer.PlayerGui:WaitForChild("ScreenGui") -- GUI'ye ekle
+
+    -- Reach kutusunu güncelleme
+    local function UpdateReachBox()
+        ReachBox.Size = UDim2.new(0, ReachStuds * 10, 0, 10) -- Boyutu günceller
+        ReachBox.Position = UDim2.new(0.5, -ReachStuds * 5, 0, 50) -- Konumunu günceller
+    end
+
     -- 📌 GUI'yi Açık Tutma
     OrionLib:SaveConfig()
 end
 
--- 📌 Eğer Key girilmediyse, key penceresini göster
-if not KeyEntered then
-    ShowKeyWindow() -- Key girilmediyse penceresi açılır
-end
+-- 📌 Ana menüyü doğrudan göster
+CreateMainMenu()
