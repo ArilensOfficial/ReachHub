@@ -1,12 +1,12 @@
--- 📌 Orion Library'yi yükle
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
+-- 📌 Rayfield Library'yi yükle
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 -- 📌 Oyun ID'si Kontrolü
 local allowedGameId = 14004668761  -- İzin verilen oyun ID'si
 
 -- Eğer oyuncu doğru oyunda değilse, hata mesajı göster
 if game.PlaceId ~= allowedGameId then
-    OrionLib:MakeNotification({
+    Rayfield:CreateNotification({
         Name = "Error",
         Content = "This script can only be executed in the 'Real Futbol 24' game.",
         Image = "rbxassetid://4483362458",
@@ -16,36 +16,41 @@ if game.PlaceId ~= allowedGameId then
 end
 
 -- 📌 Ana pencereyi oluştur
-local Window = OrionLib:MakeWindow({
+local Window = Rayfield:CreateWindow({
     Name = "ReachGod",
-    HidePremium = false, -- Premium üyeler için pencereyi gizlemeyi isteyebilirsiniz
-    SaveConfig = true,
-    ConfigFolder = "ReachGod",
-    ConfigName = "config"
+    LoadingTitle = "Loading...",
+    LoadingSubtitle = "by Falxe",
+    Theme = "Ocean",  -- Tema olarak Ocean seçildi
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "ReachGod",
+        FileName = "config"
+    },
+    Discord = {
+        Enabled = false, -- Discord bağlantısını devre dışı bırak
+        Invite = "noinvitelink", -- Discord davet bağlantısı
+        RememberJoins = true -- Discord'a her girişte hatırlamak
+    },
+    KeySystem = false, -- Key sistemi devre dışı
 })
 
 -- 📌 Reach Mesafesi Değiştirici Sekmesi
-local ReachTab = Window:MakeTab({
-    Name = "Reach Hack",
-    Icon = "rbxassetid://4483362458",
-    PremiumOnly = false
-})
+local ReachTab = Window:CreateTab("Reach Hack", 4483362458)
 
--- 📌 Reach Mesafesi Varsayılan Değeri
-local ReachStuds = 5 -- Varsayılan mesafe (5 Studs)
+-- 📌 Varsayılan Reach Mesafesi
+local ReachStuds = 1 -- Varsayılan mesafe (1 Studs)
 
 -- 📌 Reach Slider (Mesafe Ayarı) - Mobil ve PC Desteği
-ReachTab:AddSlider({
+ReachTab:CreateSlider({
     Name = "Reach Distance",
-    Min = 1,
-    Max = 20,
-    Default = ReachStuds,
+    Range = {1, 20},
     Increment = 1,
-    Text = "Studs",
+    Suffix = "Studs",
+    CurrentValue = ReachStuds,
+    Flag = "ReachStuds",
     Callback = function(Value)
         ReachStuds = Value -- Seçilen mesafeyi güncelle
-    end,
-    MobileFriendly = true  -- Mobil cihazlar için uyumlu
+    end
 })
 
 -- 📌 Reach Hilesi (Hitbox Büyütme) Fonksiyonu
@@ -60,7 +65,7 @@ local function ExtendReach()
 end
 
 -- 📌 Reach Hack Butonu
-ReachTab:AddButton({
+ReachTab:CreateButton({
     Name = "Enable Reach Hack",
     Callback = function()
         ExtendReach()
@@ -69,12 +74,4 @@ ReachTab:AddButton({
 })
 
 -- 📌 GUI'yi Açık Tutma
-OrionLib:MakeNotification({
-    Name = "Configuration Loaded",
-    Content = "Your configuration has been loaded successfully.",
-    Image = "rbxassetid://4483362458",
-    Time = 5
-})
-
--- 📌 GUI'yi tutmaya devam et
-OrionLib:Init()
+Rayfield:LoadConfiguration()
