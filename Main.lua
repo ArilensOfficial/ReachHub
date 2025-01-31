@@ -1,5 +1,5 @@
 -- 📌 Orion Library'yi yükle
-local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/OurModder/Orion/main/Source'))()
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 
 -- 📌 Ana pencereyi oluştur
 local Window = OrionLib:MakeWindow({
