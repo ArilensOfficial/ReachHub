@@ -6,13 +6,7 @@ local Key = "Helian200" -- Anahtar burada belirtilecek
 local KeyEntered = false -- Key kontrolü
 
 -- 📌 Ana pencereyi oluştur
-local Window = OrionLib:MakeWindow({
-    Name = "ReachGod",
-    HidePremium = false,
-    SaveConfig = true,
-    ConfigFolder = "ReachGod",
-    ConfigName = "config"
-})
+local Window
 
 -- 📌 Key Giriş Penceresi
 local function ShowKeyWindow()
@@ -37,6 +31,7 @@ local function ShowKeyWindow()
                     Time = 5
                 })
                 KeyWindow:Destroy() -- Key doğrulandıktan sonra pencereleri kapat
+                CreateMainMenu() -- Ana menüyü oluştur
             else
                 OrionLib:MakeNotification({
                     Name = "Error",
@@ -49,11 +44,18 @@ local function ShowKeyWindow()
     })
 end
 
--- 📌 Eğer Key girilmediyse, key penceresini göster
-if not KeyEntered then
-    ShowKeyWindow()
-else
-    -- 📌 Key girildikten sonra ana pencereyi oluştur
+-- 📌 Ana menüyü oluşturmak için fonksiyon
+local function CreateMainMenu()
+    -- 📌 Ana pencereyi oluştur
+    Window = OrionLib:MakeWindow({
+        Name = "ReachGod",
+        HidePremium = false,
+        SaveConfig = true,
+        ConfigFolder = "ReachGod",
+        ConfigName = "config"
+    })
+
+    -- 📌 Reach & Speed Tab
     local ReachTab = Window:MakeTab({
         Name = "Reach & Speed",
         Icon = "rbxassetid://4483362458",
@@ -113,4 +115,9 @@ else
 
     -- 📌 GUI'yi Açık Tutma
     OrionLib:SaveConfig()
+end
+
+-- 📌 Eğer Key girilmediyse, key penceresini göster
+if not KeyEntered then
+    ShowKeyWindow()
 end
