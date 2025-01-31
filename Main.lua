@@ -6,6 +6,9 @@ local TitleLabel = Instance.new("TextLabel")
 local KeyInput = Instance.new("TextBox")
 local SubmitButton = Instance.new("TextButton")
 local StatusLabel = Instance.new("TextLabel")
+local ReachFrame = Instance.new("Frame")  -- Reach menüsü için frame
+local ReachSlider = Instance.new("Slider")  -- Reach slider'ı
+local HackButton = Instance.new("TextButton")  -- Reach Hack Butonu
 
 -- 📌 GUI'yi ekranın ortasına yerleştirme
 ScreenGui.Parent = Player:WaitForChild("PlayerGui")
@@ -67,15 +70,47 @@ SubmitButton.MouseButton1Click:Connect(function()
         StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 0)  -- Yeşil renk, kabul edilen key
         wait(1)
         StatusLabel.Text = ""
-        -- Burada GUI'yi kapatabilir veya başka işlemler ekleyebilirsiniz
-        -- Frame.Visible = false
+        -- Key doğru ise ana menüye geçiş
+        Frame.Visible = false  -- Key girişi ekranını kapat
+        ReachFrame.Visible = true  -- Reach menüsünü aç
     else
         StatusLabel.Text = "Invalid Key! Please try again."
     end
 end)
 
--- 📌 Reach Mesafesi Değiştirici
+-- 📌 Reach Menüsü Yapılandırması
+ReachFrame.Parent = ScreenGui
+ReachFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+ReachFrame.Size = UDim2.new(0.5, 0, 0.3, 0)
+ReachFrame.Position = UDim2.new(0.25, 0, 0.35, 0)
+ReachFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+ReachFrame.Visible = false  -- Başlangıçta gizli
+
+-- Reach Mesafesi Değiştirici
 local ReachStuds = 5 -- Varsayılan mesafe (5 Studs)
+
+-- Reach Slider
+ReachSlider.Parent = ReachFrame
+ReachSlider.Size = UDim2.new(0.8, 0, 0.2, 0)
+ReachSlider.Position = UDim2.new(0.1, 0, 0.4, 0)
+ReachSlider.Min = 1  -- Minumum değer
+ReachSlider.Max = 20  -- Maksimum değer
+ReachSlider.Value = ReachStuds
+ReachSlider.Changed:Connect(function(value)
+    ReachStuds = value
+end)
+
+-- Reach Hack Butonu
+HackButton.Parent = ReachFrame
+HackButton.Size = UDim2.new(0.8, 0, 0.2, 0)
+HackButton.Position = UDim2.new(0.1, 0, 0.7, 0)
+HackButton.Text = "Enable Reach Hack"
+HackButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+HackButton.BackgroundColor3 = Color3.fromRGB(100, 200, 100)
+HackButton.TextScaled = true
+HackButton.Font = Enum.Font.GothamBold
+
+-- 📌 Reach Hilesi (Hitbox Büyütme)
 local function ExtendReach()
     local Tool = Player.Character:FindFirstChildWhichIsA("Tool") -- Oyuncunun kullandığı eşyayı al
     if Tool and Tool:FindFirstChild("Handle") then
@@ -84,15 +119,6 @@ local function ExtendReach()
         Handle.Massless = true -- Fiziksel çakışmayı engelle
     end
 end
-
--- 📌 Reach Hack Butonu
-local HackButton = Instance.new("TextButton")
-HackButton.Parent = Frame
-HackButton.Text = "Enable Reach Hack"
-HackButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-HackButton.BackgroundColor3 = Color3.fromRGB(100, 200, 100)
-HackButton.Size = UDim2.new(0.8, 0, 0.2, 0)
-HackButton.Position = UDim2.new(0.1, 0, 1, 0)
 
 HackButton.MouseButton1Click:Connect(function()
     ExtendReach()
