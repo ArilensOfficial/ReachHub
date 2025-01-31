@@ -1,59 +1,41 @@
--- 📌 Rayfield GUI'yi yükle
-local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+-- 📌 Orion Library'yi yükle
+local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/OurModder/Orion/main/Source'))()
 
 -- 📌 Ana pencereyi oluştur
-local MainWindow = Rayfield:CreateWindow({
-    Name = "Main",
-    LoadingTitle = "Loading...",
-    LoadingSubtitle = "by Falxe",
-    ConfigurationSaving = {
-       Enabled = true,
-       FolderName = nil, -- Create a custom folder for your hub/game
-       FileName = "McDonalds Hub"
-    },
-    Discord = {
-       Enabled = false,
-       Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD.
-       RememberJoins = true -- Set this to false to make them join the discord every time they load it up
-    },
-    KeySystem = false, -- Set this to true to use our key system
-    KeySettings = {
-       Title = "McDonalds Hub",
-       Subtitle = "Key System",
-       Note = "Key: McDonalds",
-       FileName = "SiriusKey",
-       SaveKey = true,
-       GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-       Key = "McDonalds"
-    }
+local Window = OrionLib:MakeWindow({
+    Name = "ReachGod",
+    HidePremium = false, -- Premium üyeler için pencereyi gizlemeyi isteyebilirsiniz
+    SaveConfig = true,
+    ConfigFolder = "ReachGod",
+    ConfigName = "config"
 })
 
--- 📌 GUI İçin Sekme ve Bölüm Aç
-local Tab = MainWindow:CreateTab("Main", 4483362458) -- Sol menüde sekme oluşturur
-local Section = Tab:CreateSection("Reach Settings")
+-- 📌 Reach Mesafesi Değiştirici Sekmesi
+local ReachTab = Window:MakeTab({
+    Name = "Reach Hack",
+    Icon = "rbxassetid://4483362458",
+    PremiumOnly = false
+})
 
--- 📌 Reach Mesafesi Değiştirici
+-- 📌 Reach Mesafesi Varsayılan Değeri
 local ReachStuds = 5 -- Varsayılan mesafe (5 Studs)
 
-local ReachSlider = Tab:CreateSlider({
+-- 📌 Reach Slider (Mesafe Ayarı)
+ReachTab:AddSlider({
     Name = "Reach Distance",
-    Range = {1, 20}, -- Minimum 1, Maksimum 20 Studs
+    Min = 1,
+    Max = 20,
+    Default = ReachStuds,
     Increment = 1,
-    Suffix = " Studs",
-    CurrentValue = ReachStuds,
-    Flag = "ReachStuds",
+    Text = "Studs",
     Callback = function(Value)
         ReachStuds = Value -- Seçilen mesafeyi güncelle
     end
 })
 
--- 📌 Oyuncu Bilgilerini Al
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-
--- 📌 Reach Hilesi (Hitbox Büyütme)
+-- 📌 Reach Hilesi (Hitbox Büyütme) Fonksiyonu
 local function ExtendReach()
+    local Character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
     local Tool = Character:FindFirstChildWhichIsA("Tool") -- Oyuncunun kullandığı eşyayı al
     if Tool and Tool:FindFirstChild("Handle") then
         local Handle = Tool.Handle
@@ -63,13 +45,21 @@ local function ExtendReach()
 end
 
 -- 📌 Reach Hack Butonu
-Tab:CreateButton({
+ReachTab:AddButton({
     Name = "Enable Reach Hack",
     Callback = function()
         ExtendReach()
-        game:GetService("RunService").Stepped:Connect(ExtendReach) -- Sürekli aktif olsun
+        game:GetService("RunService").Stepped:Connect(ExtendReach) -- Sürekli aktif olması için
     end
 })
 
 -- 📌 GUI'yi Açık Tutma
-Rayfield:LoadConfiguration()
+OrionLib:MakeNotification({
+    Name = "Configuration Loaded",
+    Content = "Your configuration has been loaded successfully.",
+    Image = "rbxassetid://4483362458",
+    Time = 5
+})
+
+-- 📌 GUI'yi tutmaya devam et
+OrionLib:Init()
