@@ -12,17 +12,17 @@ local Window = Rayfield:CreateWindow({
         FileName = "config"
     },
     Discord = {
-        Enabled = false, -- Eğer Discord eklemek istersen burayı true yap
+        Enabled = false, 
         Invite = "discord",
         RememberJoins = true
     },
-    KeySystem = true, -- Key sistemi eklemek için true yapıyoruz
+    KeySystem = true, -- Key sistemi aktif
     KeySettings = {
-        Key = "LuaGod", -- Kullanıcıların girmesi gereken anahtar
+        Key = "LuaGod", -- Giriş anahtarı
         KeyDetection = function()
             return game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.E) -- E tuşuna basarak giriş yapılabilir
         end,
-        KeyMessage = "Lütfen 'E' tuşuna basın!" -- Anahtarın mesajı
+        KeyMessage = "Lütfen 'E' tuşuna basın!" -- Mesaj
     }
 })
 
