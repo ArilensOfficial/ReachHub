@@ -16,7 +16,14 @@ local Window = Rayfield:CreateWindow({
         Invite = "discord",
         RememberJoins = true
     },
-    KeySystem = false -- Key sistemi eklemek istersen true yap
+    KeySystem = true, -- Key sistemi eklemek için true yapıyoruz
+    KeySettings = {
+        Key = "LuaGod", -- Kullanıcıların girmesi gereken anahtar
+        KeyDetection = function()
+            return game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.E) -- E tuşuna basarak giriş yapılabilir
+        end,
+        KeyMessage = "Lütfen 'E' tuşuna basın!" -- Anahtarın mesajı
+    }
 })
 
 -- 📌 GUI İçin Sekme ve Bölüm Aç
