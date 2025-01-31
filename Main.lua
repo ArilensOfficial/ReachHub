@@ -20,34 +20,69 @@ local function CreateMainMenu()
     })
 
     -- 📌 Varsayılan Reach ve Speed Değerleri
-    local ReachStuds = 1 -- Varsayılan reach mesafesi (1 Studs)
-    local SpeedValue = 1 -- Varsayılan speed (1)
+    local ReachStuds = 5 -- Varsayılan reach mesafesi (5 Studs)
+    local SpeedValue = 5 -- Varsayılan speed (5)
+    local ReachEnabled = false -- Reach aktif değil
+    local SpeedEnabled = false -- Speed aktif değil
 
-    -- 📌 Reach Slider
-    ReachTab:AddSlider({
+    -- 📌 Reach Toggle (Aç/Kapa) Butonu
+    ReachTab:AddToggle({
+        Name = "Enable Reach Hack",
+        Default = false,
+        Callback = function(Value)
+            ReachEnabled = Value
+            if ReachEnabled then
+                ReachSlider:Show() -- Reach sliderı göster
+                ExtendReach() -- Reach mesafesini uygula
+            else
+                ReachSlider:Hide() -- Reach sliderını gizle
+            end
+        end
+    })
+
+    -- 📌 Speed Toggle (Aç/Kapa) Butonu
+    ReachTab:AddToggle({
+        Name = "Enable Speed Hack",
+        Default = false,
+        Callback = function(Value)
+            SpeedEnabled = Value
+            if SpeedEnabled then
+                SpeedSlider:Show() -- Speed sliderı göster
+                game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = SpeedValue -- Speed'i uygula
+            else
+                SpeedSlider:Hide() -- Speed sliderını gizle
+                game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16 -- Normal hız
+            end
+        end
+    })
+
+    -- 📌 Reach Slider (Varsayılan: 5)
+    local ReachSlider = ReachTab:AddSlider({
         Name = "Reach Distance",
         Min = 1,
         Max = 20,
         Default = ReachStuds,
         Increment = 1,
         Text = "Studs",
+        Visible = false, -- Başlangıçta gizli
         Callback = function(Value)
-            ReachStuds = Value -- Seçilen mesafeyi güncelle
-            UpdateReachBox() -- Reach kutusunu güncelle
+            ReachStuds = Value
+            UpdateReachBox()
         end
     })
 
-    -- 📌 Speed Slider
-    ReachTab:AddSlider({
+    -- 📌 Speed Slider (Varsayılan: 5)
+    local SpeedSlider = ReachTab:AddSlider({
         Name = "Speed",
         Min = 1,
         Max = 100,
         Default = SpeedValue,
         Increment = 1,
         Text = "Speed",
+        Visible = false, -- Başlangıçta gizli
         Callback = function(Value)
-            SpeedValue = Value -- Seçilen hızı güncelle
-            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = SpeedValue -- Yürüyüş hızını ayarla
+            SpeedValue = Value
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = SpeedValue
         end
     })
 
@@ -62,16 +97,7 @@ local function CreateMainMenu()
         end
     end
 
-    -- 📌 Reach Hack Butonu
-    ReachTab:AddButton({
-        Name = "Enable Reach Hack",
-        Callback = function()
-            ExtendReach()
-            game:GetService("RunService").Stepped:Connect(ExtendReach) -- Sürekli aktif olması için
-        end
-    })
-
-    -- 📌 Reach Kutusunu Güncelleme Fonksiyonu
+    -- 📌 Reach Box'u güncelleme fonksiyonu
     local ReachBox = Instance.new("Frame")
     ReachBox.Size = UDim2.new(0, ReachStuds * 10, 0, 10) -- Şu anda Reach değerine göre
     ReachBox.Position = UDim2.new(0.5, -ReachStuds * 5, 0, 50)
