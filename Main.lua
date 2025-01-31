@@ -2,25 +2,34 @@
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 
 -- 📌 Ana pencereyi oluştur
-local Window = Rayfield:CreateWindow({
-    Name = "Reach Hack | Lua God",
-    LoadingTitle = "Real Futbol 24",
-    LoadingSubtitle = "Rayfield GUI",
+local MainWindow = Rayfield:CreateWindow({
+    Name = "Main",
+    LoadingTitle = "Loading...",
+    LoadingSubtitle = "by Falxe",
     ConfigurationSaving = {
-        Enabled = true,
-        FolderName = "ReachHack",
-        FileName = "config"
+       Enabled = true,
+       FolderName = nil, -- Create a custom folder for your hub/game
+       FileName = "McDonalds Hub"
     },
     Discord = {
-        Enabled = true, -- Eğer Discord eklemek istersen burayı true yap
-        Invite = "https://discord.com/invite/KESHm7QZ",
-        RememberJoins = true
+       Enabled = false,
+       Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD.
+       RememberJoins = true -- Set this to false to make them join the discord every time they load it up
     },
-    KeySystem = false -- Key sistemi eklemek istersen true yap
+    KeySystem = false, -- Set this to true to use our key system
+    KeySettings = {
+       Title = "McDonalds Hub",
+       Subtitle = "Key System",
+       Note = "Key: McDonalds",
+       FileName = "SiriusKey",
+       SaveKey = true,
+       GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+       Key = "McDonalds"
+    }
 })
 
 -- 📌 GUI İçin Sekme ve Bölüm Aç
-local Tab = Window:CreateTab("Main", 4483362458) -- Sol menüde sekme oluşturur
+local Tab = MainWindow:CreateTab("Main", 4483362458) -- Sol menüde sekme oluşturur
 local Section = Tab:CreateSection("Reach Settings")
 
 -- 📌 Reach Mesafesi Değiştirici
