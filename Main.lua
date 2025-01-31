@@ -5,11 +5,9 @@ local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/jens
 local Key = "Helian200" -- Anahtar burada belirtilecek
 local KeyEntered = false -- Key kontrolü
 
--- 📌 Ana pencereyi oluştur
-local Window
-
 -- 📌 Key Giriş Penceresi
 local function ShowKeyWindow()
+    -- Key giriş penceresini oluştur
     local KeyWindow = OrionLib:MakeWindow({
         Name = "Enter Key",
         HidePremium = false,
@@ -22,6 +20,7 @@ local function ShowKeyWindow()
         Placeholder = "Enter the key to continue",
         Text = "",
         Callback = function(Value)
+            -- Key doğrulama
             if Value == Key then
                 KeyEntered = true
                 OrionLib:MakeNotification({
@@ -46,8 +45,8 @@ end
 
 -- 📌 Ana menüyü oluşturmak için fonksiyon
 local function CreateMainMenu()
-    -- 📌 Ana pencereyi oluştur
-    Window = OrionLib:MakeWindow({
+    -- Ana menü sadece key doğrulandıktan sonra açılacak
+    local Window = OrionLib:MakeWindow({
         Name = "ReachGod",
         HidePremium = false,
         SaveConfig = true,
@@ -119,5 +118,5 @@ end
 
 -- 📌 Eğer Key girilmediyse, key penceresini göster
 if not KeyEntered then
-    ShowKeyWindow()
+    ShowKeyWindow() -- Key girilmediyse penceresi açılır
 end
