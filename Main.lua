@@ -19,7 +19,7 @@ end
 local Window = Rayfield:CreateWindow({
     Name = "ReachGod",
     LoadingTitle = "Loading...",
-    LoadingSubtitle = "by Falxe",
+    LoadingSubtitle = "by Helian Official",
     Theme = "Ocean",  -- Tema olarak Ocean seçildi
     ConfigurationSaving = {
         Enabled = true,
