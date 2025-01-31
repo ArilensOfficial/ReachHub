@@ -1,24 +1,10 @@
 -- 📌 Orion Library'yi yükle
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 
--- 📌 Oyun ID'si Kontrolü
-local allowedGameId = 14004668761  -- İzin verilen oyun ID'si
-
--- Eğer oyuncu doğru oyunda değilse, hata mesajı göster
-if game.PlaceId ~= allowedGameId then
-    OrionLib:MakeNotification({
-        Name = "Error",
-        Content = "This script can only be executed in the 'Real Futbol 24' game.",
-        Image = "rbxassetid://4483362458",
-        Time = 5
-    })
-    return
-end
-
 -- 📌 Ana pencereyi oluştur
 local Window = OrionLib:MakeWindow({
     Name = "ReachGod",
-    HidePremium = false, -- Premium üyeler için pencereyi gizlemeyi isteyebilirsiniz
+    HidePremium = false,
     SaveConfig = true,
     ConfigFolder = "ReachGod",
     ConfigName = "config"
@@ -34,6 +20,7 @@ local ReachTab = Window:MakeTab({
 -- 📌 Reach Mesafesi Varsayılan Değeri
 local ReachStuds = 5 -- Varsayılan mesafe (5 Studs)
 local ReachBox = nil -- Reach Box başlangıçta yok
+local BoxVisible = true -- Varsayılan olarak görünür
 
 -- 📌 Reach Slider (Mesafe Ayarı) - Mobil ve PC Desteği
 ReachTab:AddSlider({
@@ -52,7 +39,40 @@ ReachTab:AddSlider({
     MobileFriendly = true  -- Mobil cihazlar için uyumlu
 })
 
--- 📌 Reach Hilesi (Hitbox Büyütme) Fonksiyonu
+-- 📌 Reach Box Görünmezlik Toggle
+ReachTab:AddToggle({
+    Name = "Hide Reach Box",
+    Default = false,
+    Callback = function(Value)
+        BoxVisible = not Value
+        if ReachBox then
+            ReachBox.Transparency = BoxVisible and 0 or 1 -- 0 = Görünür, 1 = Görünmez
+        end
+    end
+})
+
+-- 📌 Karakter Uzuvlarını Büyütme Fonksiyonu
+local function ScaleCharacterParts()
+    local Character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+    if not Character then return end
+
+    local ScaleFactor = ReachStuds / 5  -- Orantılı büyütme (Varsayılan: 5 studs)
+
+    local PartsToScale = {
+        "Head",
+        "LeftHand", "RightHand",
+        "LeftFoot", "RightFoot"
+    }
+
+    for _, PartName in pairs(PartsToScale) do
+        local Part = Character:FindFirstChild(PartName)
+        if Part then
+            Part.Size = Vector3.new(Part.Size.X * ScaleFactor, Part.Size.Y * ScaleFactor, Part.Size.Z * ScaleFactor)
+        end
+    end
+end
+
+-- 📌 Reach Hilesi (Hitbox ve Karakter Boyutu Güncelleme)
 local function ExtendReach()
     local Character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
     local Tool = Character:FindFirstChildWhichIsA("Tool") -- Oyuncunun kullandığı eşyayı al
@@ -75,6 +95,12 @@ local function ExtendReach()
     else
         ReachBox.Size = Vector3.new(ReachStuds, ReachStuds, ReachStuds)
     end
+
+    -- Görünürlük Güncelleme
+    ReachBox.Transparency = BoxVisible and 0 or 1
+
+    -- Karakter Uzuvlarını Büyüt
+    ScaleCharacterParts()
 end
 
 -- 📌 Reach Hack Butonu
