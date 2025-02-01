@@ -1,3 +1,4 @@
+
 -- 📌 Orion Library'yi yükle
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 
@@ -60,7 +61,8 @@ ReachTab:AddToggle({
         if ReachBox then
             ReachBox.Transparency = BoxVisible and 0 or 1
         end
-    end
+    end,
+    MobileFriendly = true
 })
 
 -- 📌 Infinite Stamina Toggle
@@ -75,7 +77,18 @@ StaminaTab:AddToggle({
             ResetStamina() -- Stamina'yı normal yap
             UpdateNotification("Hile Patch'li ❌") -- Bildirimi patch'li olarak güncelle
         end
-    end
+    end,
+    MobileFriendly = true
+})
+
+-- 📌 Reach Hack Butonu
+ReachTab:AddButton({
+    Name = "Enable Reach Hack",
+    Callback = function()
+        ExtendReach()
+        UpdateNotification("Hile Aktif ✅️") -- Bildirim
+    end,
+    MobileFriendly = true -- Buton telefon uyumlu
 })
 
 -- 📌 Hile Bildirimi Güncelleme
@@ -160,15 +173,6 @@ local function ResetStamina()
         Humanoid.JumpHeight = 10
     end
 end
-
--- 📌 Reach Hack Butonu
-ReachTab:AddButton({
-    Name = "Enable Reach Hack",
-    Callback = function()
-        ExtendReach()
-        UpdateNotification("Hile Aktif ✅️") -- Bildirim
-    end
-})
 
 -- 📌 GUI'yi Açık Tutma
 OrionLib:MakeNotification({
